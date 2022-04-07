@@ -1,0 +1,29 @@
+#!/bin/bash
+
+#$ -M drichte2@nd.edu
+#$ -m n
+#$ -pe mpi-16 64
+#$ -q *@@richter
+#$ -N Theo_Pi_1
+#$ -j y
+
+case=case1
+time=0000000
+runout=$case.out.$time
+
+datadir=/scratch365/drichte2/Theo_Pi/$case
+homedir=~/Research/Theo_Pi/$case
+
+cd $homedir
+
+module load mvapich2
+module load intel
+module load netcdf
+
+imachine=0
+echo $imachine > ./mach.file
+echo $datadir >> ./mach.file
+
+mpirun -n 64 $homedir/../lesmpi.a $homedir/params.in > $datadir/$runout
+
+
